@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Android300CEM</string>
+    <string name="button">Button</string>
+    <string name="type_your_name_here">Type your name here</string>
+    <string name="name">Name:</string>
+</resources>
