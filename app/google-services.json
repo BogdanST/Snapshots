@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "982784384589",
-    "firebase_url": "https://snapshots-99a41.firebaseio.com",
-    "project_id": "snapshots-99a41",
-    "storage_bucket": "snapshots-99a41.appspot.com"
+    "project_number": "260150360350",
+    "firebase_url": "https://snapshots-39174.firebaseio.com",
+    "project_id": "snapshots-39174",
+    "storage_bucket": "snapshots-39174.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:982784384589:android:30442aa9006dab3f",
+        "mobilesdk_app_id": "1:260150360350:android:30442aa9006dab3f",
         "android_client_info": {
           "package_name": "a300.cem"
         }
       },
       "oauth_client": [
         {
-          "client_id": "982784384589-rgehmn9ec4q11c83e8n58pk68l80iv8v.apps.googleusercontent.com",
+          "client_id": "260150360350-6cg9vffst1gsrqfpbiiuiro23vssgv0n.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "a300.cem",
@@ -23,13 +23,13 @@
           }
         },
         {
-          "client_id": "982784384589-2qvqdlnacgq8jpd3oak9ak9tfuprauuj.apps.googleusercontent.com",
+          "client_id": "260150360350-bmk5m14k84nh5jepikk5aeaj6eca2dg2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBnF3zE-7nokgLdH4nXkFgsfJemrlINL6k"
+          "current_key": "AIzaSyA10DglUB31-qhzwHAifbrLUp7dU3KtWJE"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "982784384589-2qvqdlnacgq8jpd3oak9ak9tfuprauuj.apps.googleusercontent.com",
+              "client_id": "260150360350-bmk5m14k84nh5jepikk5aeaj6eca2dg2.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

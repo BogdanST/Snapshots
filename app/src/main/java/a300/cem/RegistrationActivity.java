@@ -19,16 +19,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    private Button mRegister;
-    private EditText mEmail,mPassword,mName;
+    private Button mRegistration;
+    private EditText mEmail, mPassword, mName;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,9 +34,9 @@ public class RegistrationActivity extends AppCompatActivity {
 
         firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth){
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if(user != null){
+                if (user!=null){
                     Intent intent = new Intent(getApplication(), MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
@@ -48,34 +46,33 @@ public class RegistrationActivity extends AppCompatActivity {
             }
         };
 
-
         mAuth = FirebaseAuth.getInstance();
 
-        mRegister = findViewById(R.id.register);
+        mRegistration = findViewById(R.id.registration);
         mName = findViewById(R.id.name);
         mEmail = findViewById(R.id.email);
         mPassword = findViewById(R.id.password);
 
-        mRegister.setOnClickListener(new View.OnClickListener(){
+
+        mRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 final String name = mName.getText().toString();
                 final String email = mEmail.getText().toString();
                 final String password = mPassword.getText().toString();
-
-                mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
+                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(!task.isSuccessful()){
-                            Toast.makeText(getApplication(), "Sign In Error", Toast.LENGTH_SHORT).show();
+                        if (!task.isSuccessful()){
+                            Toast.makeText(getApplication(), "Sign in ERROR", Toast.LENGTH_SHORT).show();
                         }else{
                             String userId = mAuth.getCurrentUser().getUid();
                             DatabaseReference currentUserDb = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
-                            Map userInfo = new HashMap<>();
-                            userInfo.put("email",email);
-                            userInfo.put("name",name);
-                            userInfo.put("profile", "default");
 
+                            Map userInfo = new HashMap<>();
+                            userInfo.put("email", email);
+                            userInfo.put("name",name);
+                            userInfo.put("profile","default");
                             currentUserDb.updateChildren(userInfo);
                         }
                     }
@@ -86,13 +83,13 @@ public class RegistrationActivity extends AppCompatActivity {
     }
 
     @Override
-    protected  void onStart(){
+    protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(firebaseAuthStateListener);
     }
 
     @Override
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
         mAuth.removeAuthStateListener(firebaseAuthStateListener);
     }
