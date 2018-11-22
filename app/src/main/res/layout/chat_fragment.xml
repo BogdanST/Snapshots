@@ -10,4 +10,5 @@
        android:text="Fragment chat"
        android:gravity="center"
        android:textColor="@android:color/white"/>
+
 </LinearLayout>

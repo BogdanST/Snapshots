@@ -27,16 +27,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        UserInformation userInformationListener = new UserInformation();
-        userInformationListener.startFetching();
-
-        ViewPager viewPager = findViewById(R.id.viewPager);
+        ViewPager viewPager = findViewById(R.id.viewpager);
 
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapterViewPager);
         viewPager.setCurrentItem(1);
-
     }
 
     public static class MyPagerAdapter extends FragmentPagerAdapter{
@@ -53,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 case 1:
                     return CameraFragment.newInstance();
                 case 2:
-                   // return StoryFragment.newInstance();
+                    return StoryFragment.newInstance();
             }
             return null;
         }
