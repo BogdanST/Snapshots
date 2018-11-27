@@ -31,11 +31,10 @@ import java.util.List;
 public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
     Camera camera;
+    Camera.PictureCallback jpegCallback;
 
     SurfaceView mSurfaceView;
     SurfaceHolder mSurfaceHolder;
-
-    //
     final int CAMERA_REQUEST_CODE = 1;
 
     public static CameraFragment newInstance(){
@@ -59,7 +58,12 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
             mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         }
 
+        //BUTTONS
         Button mLogout = view.findViewById(R.id.logout);
+        Button mCapture = view.findViewById(R.id.capture);
+
+
+        //Click -> LogOut the user
         mLogout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -67,6 +71,21 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
             }
         });
 
+        mCapture.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public  void onClick(View view){
+                captureImage();
+            }
+        });
+
+        jpegCallback = new Camera.PictureCallback(){
+            public void onPictureTaken(byte[] bytes, Camera camera){
+                Intent intent = new Intent(getActivity(), ShowCaptureActivity.class );
+                intent.putExtra("capture", bytes);
+                startActivity(intent);
+                return;
+            }
+        };
 
         return view;
 
@@ -74,17 +93,33 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        //Check if the camera is opened
         camera = Camera.open();
 
+        //Since I use the camera API instead of Camera2API, it is required to set some parameters
         Camera.Parameters parameters;
         parameters = camera.getParameters();
 
         //Set Display Orientation to 90 degrees
         camera.setDisplayOrientation(90);
-        //Frames per sec - Set to 30
+        //Frames per sec - Set to 30 {by default the camera is set to 30 FPS}
         parameters.setPreviewFrameRate(30);
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
-        //camera.setParameters(parameters);
+
+        //Automatically camera stretches the image, so in order to preserve the image a few parameters are required.
+        Camera.Size bestSize = null;
+        List<Camera.Size> sizeList = camera.getParameters().getSupportedPreviewSizes();
+        bestSize = sizeList.get(0);
+        for(int i = 1; i< sizeList.size(); i++){
+            if((sizeList.get(i).width* sizeList.get(i).height) > (bestSize.width*bestSize.height)){
+                bestSize = sizeList.get(i);
+            }
+        }
+        parameters.setPreviewSize(bestSize.width, bestSize.height);
+
+
+        //camera.setParameters(parameters); -- is not required to set this manually,
+        //                                     natively camera gets the parameters automatically
 
         try {
             camera.setPreviewDisplay(mSurfaceHolder);
@@ -95,16 +130,19 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
         camera.startPreview();
     }
 
+
+    //Check if the surface has changed
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
     }
 
+    //Check if the surface has been destroyed
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
     }
 
 
-    //Getting permissions request Result
+    //Getting permissions -> request Result
     @Override
     public void onRequestPermissionsResult (int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -121,12 +159,17 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
         }
     }
 
+
     public void LogOut(){
         FirebaseAuth.getInstance().signOut();
         Intent intent  = new Intent(getContext(), SplashScreenActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         return;
+    }
+
+    public void captureImage(){
+        camera.takePicture(null, null, jpegCallback);
     }
 
 }
