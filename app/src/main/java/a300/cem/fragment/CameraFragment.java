@@ -1,12 +1,8 @@
-package a300.cem;
+package a300.cem.fragment;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,11 +18,13 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
+
+import a300.cem.FindUsersActivity;
+import a300.cem.R;
+import a300.cem.ShowCaptureActivity;
+import a300.cem.SplashScreenActivity;
 
 public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
@@ -61,6 +59,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
         //BUTTONS
         Button mLogout = view.findViewById(R.id.logout);
         Button mCapture = view.findViewById(R.id.capture);
+        Button mFindUser = view.findViewById(R.id.findUsers);
 
 
         //Click -> LogOut the user
@@ -71,10 +70,18 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
             }
         });
 
+        //captureImage
         mCapture.setOnClickListener(new View.OnClickListener(){
             @Override
             public  void onClick(View view){
                 captureImage();
+            }
+        });
+
+        mFindUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FindUsers();
             }
         });
 
@@ -172,4 +179,11 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
         camera.takePicture(null, null, jpegCallback);
     }
 
+
+    public void FindUsers(){
+        Intent intent  = new Intent(getContext(), FindUsersActivity.class);
+        startActivity(intent);
+        return;
+
+    }
 }
