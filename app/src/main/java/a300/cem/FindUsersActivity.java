@@ -110,7 +110,7 @@ public class FindUsersActivity extends AppCompatActivity {
     }
 
 
-    //Clear
+    //Clear the database
     public void clear(){
         int size = this.results.size();
         this.results.clear();
