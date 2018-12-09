@@ -26,6 +26,8 @@ import a300.cem.R;
 import a300.cem.ShowCaptureActivity;
 import a300.cem.SplashScreenActivity;
 
+import static android.hardware.Camera.open;
+
 public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
     Camera camera;
@@ -101,7 +103,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         //Check if the camera is opened
-        camera = Camera.open();
+        camera = open();
 
         //Since I use the camera API instead of Camera2API, it is required to set some parameters
         Camera.Parameters parameters;
@@ -115,6 +117,9 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
         //Automatically camera stretches the image, so in order to preserve the image a few parameters are required.
         Camera.Size bestSize = null;
+
+
+
         List<Camera.Size> sizeList = camera.getParameters().getSupportedPreviewSizes();
         bestSize = sizeList.get(0);
         for(int i = 1; i< sizeList.size(); i++){
@@ -125,7 +130,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
         parameters.setPreviewSize(bestSize.width, bestSize.height);
 
 
-        //camera.setParameters(parameters); -- is not required to set this manually,
+        //camera.setParameters(parameters); //-- is not required to set this manually,
         //                                     natively camera gets the parameters automatically
 
         try {
