@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,13 +38,13 @@ public class StoryFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.chat_fragment , container, false);
+        View view = inflater.inflate(R.layout.story_fragment , container, false);
 
         mRecyclerView = view.findViewById(R.id.recyclerView);
         mRecyclerView.setNestedScrollingEnabled(false);
 
         //The recyclerView should not have a fixed size since the list can go up. A user can follow multiple 'friends'
-        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setHasFixedSize(false);
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getContext());
@@ -53,6 +54,14 @@ public class StoryFragment extends Fragment {
         mAdapter = new StoryAdapter(getDataSet(),getContext());
         mRecyclerView.setAdapter(mAdapter);
 
+        Button mRefresh = view.findViewById(R.id.refresh);
+        mRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clear();
+                listenForData();
+            }
+        });
 
         return view;
 

@@ -5,12 +5,11 @@
     android:background="@color/colorPrimaryDark"
     android:orientation="vertical">
 
-    <TextView
+    <Button
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Story Fragment"
-        android:gravity="center"
-        android:textColor="@android:color/white"/>
+        android:layout_height="wrap_content"
+        android:text="refresh"
+        android:id="@+id/refresh"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"

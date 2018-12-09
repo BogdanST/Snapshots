@@ -10,9 +10,11 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="20sp">
+
+
             <TextView
                 android:textStyle="bold"
-                android:textColor="@android:color/black"
+                android:textColor="@android:color/white"
                 android:id="@+id/email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
