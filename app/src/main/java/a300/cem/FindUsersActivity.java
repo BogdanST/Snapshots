@@ -60,6 +60,7 @@ public class FindUsersActivity extends AppCompatActivity {
 
                 //Before searching in database, it requires to clear the data.
                 clear();
+                //Searching for user by email
                 listenForData();
             }
         });
@@ -79,7 +80,7 @@ public class FindUsersActivity extends AppCompatActivity {
                     email = dataSnapshot.child("email").getValue().toString();
 
                 }
-                if(!email.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                if(!email.equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
                     UsersObject obj = new UsersObject(email,uid);
                     results.add(obj);
                     //After the data has changed we need to notify the adapter.
@@ -119,7 +120,9 @@ public class FindUsersActivity extends AppCompatActivity {
 
     //Get the results
     private ArrayList<UsersObject> results = new ArrayList<>();
-    public ArrayList<UsersObject> getDataSet(){ return results;}
+    public ArrayList<UsersObject> getDataSet(){
+        listenForData();
+        return results;}
 
 }
 

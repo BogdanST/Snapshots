@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.List;
 
 import a300.cem.R;
@@ -31,13 +34,28 @@ public class RcAdapter extends RecyclerView.Adapter<RcViewHolders> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RcViewHolders rcViewHolders, int i) {
+    public void onBindViewHolder(@NonNull final RcViewHolders rcViewHolders, int i) {
         rcViewHolders.mEmail.setText(usersList.get(i).getEmail());
+
+        rcViewHolders.mFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                if(rcViewHolders.mFollow.getText().equals("Follow")){
+                    rcViewHolders.mFollow.setText("following");
+                    FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("following").child(usersList.get(rcViewHolders.getLayoutPosition()).getUid()).setValue(true);
+                }else{
+                    rcViewHolders.mFollow.setText("follow");
+                    FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("following").child(usersList.get(rcViewHolders.getLayoutPosition()).getUid()).removeValue();
+                }
+            }
+        });
 
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return this.usersList.size();
     }
 }
