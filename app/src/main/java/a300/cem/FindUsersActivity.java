@@ -15,12 +15,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 
-import a300.cem.RecyclerViewFollow.RcAdapter;
-import a300.cem.RecyclerViewFollow.UsersObject;
+import a300.cem.RecyclerViewFollow.FollowAdapter;
+import a300.cem.RecyclerViewFollow.FollowObject;
 
 public class FindUsersActivity extends AppCompatActivity {
 
@@ -51,7 +50,7 @@ public class FindUsersActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new RcAdapter(getDataSet(), getApplication());
+        mAdapter = new FollowAdapter(getDataSet(), getApplication());
         mRecyclerView.setAdapter(mAdapter);
 
         mSearch.setOnClickListener(new View.OnClickListener(){
@@ -81,7 +80,7 @@ public class FindUsersActivity extends AppCompatActivity {
 
                 }
                 if(!email.equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
-                    UsersObject obj = new UsersObject(email,uid);
+                    FollowObject obj = new FollowObject(email,uid);
                     results.add(obj);
                     //After the data has changed we need to notify the adapter.
                     mAdapter.notifyDataSetChanged();
@@ -119,8 +118,8 @@ public class FindUsersActivity extends AppCompatActivity {
     }
 
     //Get the results
-    private ArrayList<UsersObject> results = new ArrayList<>();
-    public ArrayList<UsersObject> getDataSet(){
+    private ArrayList<FollowObject> results = new ArrayList<>();
+    public ArrayList<FollowObject> getDataSet(){
         listenForData();
         return results;}
 

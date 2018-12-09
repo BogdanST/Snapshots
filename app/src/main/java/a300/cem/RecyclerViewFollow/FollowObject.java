@@ -1,11 +1,11 @@
 package a300.cem.RecyclerViewFollow;
 
-public class UsersObject {
+public class FollowObject {
     private String email;
     private String uid;
 
     //Constructor for UserObject [Email, uid]
-    public UsersObject(String email, String uid){
+    public FollowObject(String email, String uid){
         this.email = email;
         this.uid = uid;
     }

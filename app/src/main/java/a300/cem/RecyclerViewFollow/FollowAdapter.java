@@ -16,26 +16,26 @@ import a300.cem.R;
 import a300.cem.UserInformation;
 
 
-public class RcAdapter extends RecyclerView.Adapter<RcViewHolders> {
+public class FollowAdapter extends RecyclerView.Adapter<FollowViewHolders> {
 
-    private List<UsersObject> usersList;
+    private List<FollowObject> usersList;
     private Context context;
 
-    public RcAdapter(List<UsersObject> usersList, Context context){
+    public FollowAdapter(List<FollowObject> usersList, Context context){
         this.usersList = usersList;
         this.context = context;
 
     }
 
     @Override
-    public RcViewHolders onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public FollowViewHolders onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View layoutView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recyclerview_followers_item,null);
-        RcViewHolders rcv = new RcViewHolders(layoutView);
+        FollowViewHolders rcv = new FollowViewHolders(layoutView);
         return rcv;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final RcViewHolders rcViewHolders, int i) {
+    public void onBindViewHolder(@NonNull final FollowViewHolders rcViewHolders, int i) {
         rcViewHolders.mEmail.setText(usersList.get(i).getEmail());
 
         //!Change button from follow to following!
