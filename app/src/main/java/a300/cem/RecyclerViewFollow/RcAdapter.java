@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.List;
 
 import a300.cem.R;
+import a300.cem.UserInformation;
 
 
 public class RcAdapter extends RecyclerView.Adapter<RcViewHolders> {
@@ -37,12 +38,19 @@ public class RcAdapter extends RecyclerView.Adapter<RcViewHolders> {
     public void onBindViewHolder(@NonNull final RcViewHolders rcViewHolders, int i) {
         rcViewHolders.mEmail.setText(usersList.get(i).getEmail());
 
+        //!Change button from follow to following!
+        if(UserInformation.listFollowing.contains(usersList.get(rcViewHolders.getLayoutPosition()).getUid())){
+            rcViewHolders.mFollow.setText("following");
+        }else{
+            rcViewHolders.mFollow.setText("follow");
+        }
+
         rcViewHolders.mFollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                if(rcViewHolders.mFollow.getText().equals("Follow")){
+                if(rcViewHolders.mFollow.getText().equals("follow")){
                     rcViewHolders.mFollow.setText("following");
                     FirebaseDatabase.getInstance().getReference().child("users").child(userId).child("following").child(usersList.get(rcViewHolders.getLayoutPosition()).getUid()).setValue(true);
                 }else{
