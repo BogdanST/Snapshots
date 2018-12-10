@@ -7,11 +7,11 @@
         android:name="android.permission.CAMERA"
         tools:ignore="ManifestOrder" />
 
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
-    <uses-feature android:name="android.hardware.camera2"
+    <uses-feature
+        android:name="android.hardware.camera2"
         android:required="true" />
 
     <application
@@ -34,7 +34,8 @@
         <activity android:name=".RegistrationActivity" />
         <activity android:name=".ShowCaptureActivity" />
         <activity android:name=".FindUsersActivity" />
-        <activity android:name=".DisplayImageActivity"></activity>
+        <activity android:name=".DisplayImageActivity" />
+        <activity android:name=".ChooseReceiverActivity"></activity>
     </application>
 
 </manifest>

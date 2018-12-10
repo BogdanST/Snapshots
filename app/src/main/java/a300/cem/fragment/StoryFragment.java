@@ -30,7 +30,6 @@ public class StoryFragment extends Fragment {
 
 
 
-
     public static StoryFragment newInstance(){
         StoryFragment fragment = new StoryFragment();
         return fragment;

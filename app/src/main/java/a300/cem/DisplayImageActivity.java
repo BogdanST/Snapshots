@@ -40,7 +40,7 @@ public class DisplayImageActivity extends AppCompatActivity {
         mImage = findViewById(R.id.image);
 
         listenForStory();
-
+        //TODO: implement a switch to Char or Story
        /* switch(chatOrStory){
             case "chat":
                 listenForChat();

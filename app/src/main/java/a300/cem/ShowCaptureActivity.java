@@ -1,5 +1,6 @@
 package a300.cem;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -53,60 +54,20 @@ public class ShowCaptureActivity extends AppCompatActivity {
         Uid = FirebaseAuth.getInstance().getUid();
 
         //Buttons:
-        Button mStory = findViewById(R.id.story);
+        Button mSend = findViewById(R.id.send);
 
-        mStory.setOnClickListener(new View.OnClickListener(){
+        mSend.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                saveToStories();
-            }
-        });
-
-    }
-
-    //Save Captures to Firebase - Storage
-    public void saveToStories(){
-        final DatabaseReference userStoryDb = FirebaseDatabase.getInstance().getReference().child("users").child(Uid).child("story");
-        final String key = userStoryDb.push().getKey();
-
-        StorageReference filePath = FirebaseStorage.getInstance().getReference().child("captures").child(key);
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos );
-
-        byte[] dataToUpload = baos.toByteArray();
-        UploadTask uploadTask = filePath.putBytes(dataToUpload);
-
-
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                finish();
-                return;
-            }
-        });
-
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Uri imageURL = taskSnapshot.getDownloadUrl();
-
-
-                Long currentTimeStamp = System.currentTimeMillis();
-                Long endTimeStamp = currentTimeStamp + (24*60*60*1000); //url valid for 24 hours
-
-                Map<String, Object> mapToUpload = new HashMap<>();
-                mapToUpload.put("imageUrl", imageURL.toString());
-                mapToUpload.put("timestampBeg", currentTimeStamp);
-                mapToUpload.put("timestampEnd", endTimeStamp);
-
-                userStoryDb.child(key).setValue(mapToUpload);
-
-                finish();
+                //start the ChooseReceiverActivity
+                Intent intent = new Intent(getApplicationContext(), ChooseReceiverActivity.class);
+                startActivity(intent);
                 return;
             }
         });
 
     }
+
+
 
 }
