@@ -35,13 +35,12 @@ public class DisplayImageActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         userId = b.getString("userId");
-        //chatOrStory = b.getString("chatOrStory");
+        chatOrStory = b.getString("chatOrStory");
 
         mImage = findViewById(R.id.image);
 
-        listenForStory();
-        //TODO: implement a switch to Char or Story
-       /* switch(chatOrStory){
+
+        switch(chatOrStory){
             case "chat":
                 listenForChat();
                 break;
@@ -49,7 +48,7 @@ public class DisplayImageActivity extends AppCompatActivity {
                 listenForStory();
                 break;
         }
-        */
+
     }
 
     ArrayList<String> imageUrlList = new ArrayList<>();

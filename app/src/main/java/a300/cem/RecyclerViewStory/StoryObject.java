@@ -3,11 +3,13 @@ package a300.cem.RecyclerViewStory;
 public class StoryObject {
     private String email;
     private String uid;
+    private String chatOrStory;
 
     //Constructor for UserObject [Email, uid]
-    public StoryObject(String email, String uid){
+    public StoryObject(String email, String uid, String chatOrStory){
         this.email = email;
         this.uid = uid;
+        this.chatOrStory = chatOrStory;
     }
 
     //get each parameter individually
@@ -25,6 +27,14 @@ public class StoryObject {
 
     public void setEmail(String email){
         this.email = email;
+    }
+
+    public String getChatOrStory() {
+        return chatOrStory;
+    }
+
+    public void setChatOrStory(String email){
+        this.chatOrStory = chatOrStory;
     }
 
 
