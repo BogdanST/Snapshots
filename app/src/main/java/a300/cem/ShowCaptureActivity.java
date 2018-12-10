@@ -21,6 +21,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.BitSet;
 import java.util.HashMap;
@@ -29,37 +30,25 @@ import java.util.Map;
 public class ShowCaptureActivity extends AppCompatActivity {
 
     String Uid;
-    Bitmap rotateBitmap;
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_capture);
 
-
-        //Getting image from Bundle
-        Bundle extras = getIntent().getExtras();
-        assert extras != null;
-        byte[] b = extras.getByteArray("capture");
-
-
-        //Check if the byte is not NULL
-        if(b!=null){
-            //get the ImageView
-            ImageView image = findViewById(R.id.image_capture);
-            //Decode the image
-            Bitmap decodeBitmap = BitmapFactory.decodeByteArray(b, 0 , b.length);
-
-
-            //A function is require to rotate the image, after has been captured
-            //Even if the Image was taken in a vertical view, the app will automatically reverse it to a landscape view
-            //So in order to keep the orientation, I will implement a function that preserves the view
-            rotateBitmap = rotate(decodeBitmap);
-
-            //Show Picture
-            image.setImageBitmap(rotateBitmap);
-
+        //Access the image from localStorage
+        try {
+            bitmap = BitmapFactory.decodeStream(getApplication().openFileInput("imageToSend"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            finish();
+            return;
         }
+
+        //Display the image
+        ImageView mImage = findViewById(R.id.image_capture);
+        mImage.setImageBitmap(bitmap);
 
         Uid = FirebaseAuth.getInstance().getUid();
 
@@ -83,7 +72,7 @@ public class ShowCaptureActivity extends AppCompatActivity {
         StorageReference filePath = FirebaseStorage.getInstance().getReference().child("captures").child(key);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        rotateBitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos );
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos );
 
         byte[] dataToUpload = baos.toByteArray();
         UploadTask uploadTask = filePath.putBytes(dataToUpload);
@@ -120,13 +109,4 @@ public class ShowCaptureActivity extends AppCompatActivity {
 
     }
 
-    public Bitmap rotate(Bitmap decodeBitmap) {
-        int w = decodeBitmap.getWidth();
-        int h = decodeBitmap.getHeight();
-
-        Matrix matrix = new Matrix();
-        matrix.setRotate(90);
-        return Bitmap.createBitmap(decodeBitmap, 0, 0, w,h,matrix,true );
-
-    };
 }

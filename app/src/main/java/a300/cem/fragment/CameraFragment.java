@@ -1,8 +1,12 @@
 package a300.cem.fragment;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +22,9 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -89,16 +96,56 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
         jpegCallback = new Camera.PictureCallback(){
             public void onPictureTaken(byte[] bytes, Camera camera){
-                Intent intent = new Intent(getActivity(), ShowCaptureActivity.class );
-                intent.putExtra("capture", bytes);
-                startActivity(intent);
-                return;
+
+                //Decode the image
+                Bitmap decodeBitmap = BitmapFactory.decodeByteArray(bytes, 0 , bytes.length);
+
+
+                //A function is require to rotate the image, after has been captured
+                //Even if the Image was taken in a vertical view, the app will automatically reverse it to a landscape view
+                //So in order to keep the orientation, I will implement a function that preserves the view
+                Bitmap rotateBitmap = rotate(decodeBitmap);
+
+                String fileLocation = SaveImageToStorage(rotateBitmap);
+                //before starting the ShopCaptureActivity -> verify if we get the fileLocation
+                if(fileLocation != null){
+                    Intent intent = new Intent(getActivity(), ShowCaptureActivity.class );
+                    startActivity(intent);
+                    return;
+                }
+
             }
         };
 
         return view;
 
     }
+
+    //Save the file in a file system
+    public String SaveImageToStorage(Bitmap bitmap){
+        String filename = "imageToSend";
+        try{
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            FileOutputStream fo = getContext().openFileOutput(filename,Context.MODE_PRIVATE);
+            fo.write(bytes.toByteArray());
+            fo.close();
+        }catch (Exception e){
+            e.printStackTrace();
+            filename = null;
+        }
+        return filename;
+    }
+
+    public Bitmap rotate(Bitmap decodeBitmap) {
+        int w = decodeBitmap.getWidth();
+        int h = decodeBitmap.getHeight();
+
+        Matrix matrix = new Matrix();
+        matrix.setRotate(90);
+        return Bitmap.createBitmap(decodeBitmap, 0, 0, w,h,matrix,true );
+
+    };
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
