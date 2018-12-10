@@ -27,10 +27,16 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
+
+    //SQL database
+    DatabaseHandler myDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
+
+        myDatabase = new DatabaseHandler(this);
 
         firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -60,6 +66,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 final String name = mName.getText().toString();
                 final String email = mEmail.getText().toString();
                 final String password = mPassword.getText().toString();
+
                 mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(RegistrationActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -74,6 +81,11 @@ public class RegistrationActivity extends AppCompatActivity {
                             userInfo.put("name",name);
                             userInfo.put("profile","default");
                             currentUserDb.updateChildren(userInfo);
+
+
+                            //Push Values in SQLiteDatabase
+
+                            myDatabase.addContact(new UserObjectDb(userId,email,name,"default"));
                         }
                     }
                 });
