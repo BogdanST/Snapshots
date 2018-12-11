@@ -86,6 +86,8 @@ public class RegistrationActivity extends AppCompatActivity {
                             //Push Values in SQLiteDatabase
 
                             myDatabase.addContact(new UserObjectDb(userId,email,name,"default"));
+                            //Close the database
+                            myDatabase.close();
                         }
                     }
                 });

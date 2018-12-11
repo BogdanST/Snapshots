@@ -4,14 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context=".LoginActivity"
     android:orientation="vertical">
+
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id = "@+id/email"
-        android:hint="Email"/>
+        android:hint="Email"
+        />
 
     <EditText
         android:layout_width="match_parent"
@@ -19,10 +22,12 @@
         android:id = "@+id/password"
         android:hint="Password"/>
 
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text ="Login"
         android:id="@+id/login"/>
+
 
 </LinearLayout>
