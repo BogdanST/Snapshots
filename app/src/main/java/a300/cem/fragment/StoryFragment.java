@@ -58,6 +58,7 @@ public class StoryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 clear();
+                mAdapter.notifyDataSetChanged();
                 listenForData();
             }
         });

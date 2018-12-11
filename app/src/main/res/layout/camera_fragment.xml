@@ -6,13 +6,14 @@
     android:background="@color/colorAccent">
 
     <SurfaceView
+        android:id="@+id/surfaceView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/surfaceView"/>
+        android:layout_height="match_parent" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
 
         <Button
             android:layout_weight="1"
@@ -26,7 +27,32 @@
             android:layout_height="wrap_content"
             android:text="Find Users"
             android:id="@+id/findUsers"/>
+        <Button
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Location"
+            android:id="@+id/gps_location"/>
+
     </LinearLayout>
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:background="#888888"
+            android:id="@+id/location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="53dp"
+            android:text="Coordinates: "
+            android:textColor="#FFFFFF" />
+
+    </RelativeLayout>
 
 
     <Button
@@ -35,7 +61,6 @@
         android:layout_height="wrap_content"
         android:text="capture"
         android:id="@+id/capture"/>
-
 
 
 </FrameLayout>

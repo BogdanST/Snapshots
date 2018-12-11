@@ -13,6 +13,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,10 +47,10 @@ import static android.hardware.Camera.open;
 public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
 
-    /*
+
     //Location
     private LocationManager locationManager;
-    private LocationListener locationListener; */
+    private LocationListener locationListener;
 
 
     //camera
@@ -61,7 +63,9 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
     //PERMISSIONS
     final int CAMERA_REQUEST_CODE = 1;
-    //final int LOCATION_REQUEST_CODE = 2;
+    final int LOCATION_REQUEST_CODE = 2;
+
+
 
     public static CameraFragment newInstance() {
         CameraFragment fragment = new CameraFragment();
@@ -75,13 +79,23 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
         mSurfaceView = view.findViewById(R.id.surfaceView);
         mSurfaceHolder = mSurfaceView.getHolder();
 
-        /*
+        //BUTTONS
+        Button mLogout = view.findViewById(R.id.logout);
+        Button mCapture = view.findViewById(R.id.capture);
+        Button mFindUser = view.findViewById(R.id.findUsers);
+        Button mGps = view.findViewById(R.id.gps_location);
+        final TextView mLocation = view.findViewById(R.id.location);
+
+
         //GET THE LOCATION
         locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+                mLocation.append(location.getLatitude() +" "+ location.getLongitude());
                 Log.d("My location", location.toString());
+
+
             }
 
             @Override
@@ -96,47 +110,53 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
             @Override
             public void onProviderDisabled(String provider) {
+                Intent newIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(newIntent);
 
             }
         };
 
-        /*
-            if (Build.VERSION.SDK_INT < 23) {
-                Toast.makeText(getActivity(), "The android version is bellow marshmallow!", Toast.LENGTH_SHORT).show();
 
+
+        //Get Permission to access camera
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+        } else {
+            //Bridge gap between SurfaceHolder and SurfaceView
+            mSurfaceHolder.addCallback(this);
+            mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        }
+
+        if (Build.VERSION.SDK_INT < 23) {
+            Toast.makeText(getActivity(), "The android version is bellow marshmallow!", Toast.LENGTH_SHORT).show();
+
+        } else {
+            //Check if the permission was granted
+            //get permission to access the location
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
             } else {
-                //Check if the permission was granted
-                //get permission to access the location
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
-                } else {
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-                }
-            }*/
-
-
-            //Get Permission to access camera
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-            } else {
-                //Bridge gap between SurfaceHolder and SurfaceView
-                mSurfaceHolder.addCallback(this);
-                mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+                //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListener);
             }
+        }
 
 
-        //BUTTONS
-        Button mLogout = view.findViewById(R.id.logout);
-        Button mCapture = view.findViewById(R.id.capture);
-        Button mFindUser = view.findViewById(R.id.findUsers);
 
+        //LocationButton
+        mGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Might appear underline because it requires to be in a permission block.
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000000, 0, locationListener);
+            }
+        });
 
         //Click -> LogOut the user
-        mLogout.setOnClickListener(new View.OnClickListener(){
+        mLogout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 LogOut();
-            }
+                }
         });
 
         //captureImage
@@ -258,11 +278,10 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
     }
 
 
-    //Getting permissions -> request Result [CAMERA]
+    //Getting permissions -> request Result [CAMERA, Location]
     @Override
     public void onRequestPermissionsResult (int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
 
 
         switch (requestCode){
@@ -276,15 +295,15 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
                 break;
             }
 
-           /* case LOCATION_REQUEST_CODE:{
+            case LOCATION_REQUEST_CODE:{
                 if(grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED){
                     if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED){
-                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, locationListener);
                     }
 
                 }
                 break;
-            }*/
+            }
         }
     }
 
@@ -306,6 +325,5 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
         Intent intent  = new Intent(getContext(), FindUsersActivity.class);
         startActivity(intent);
         return;
-
     }
 }
