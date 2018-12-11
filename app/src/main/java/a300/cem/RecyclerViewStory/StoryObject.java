@@ -33,7 +33,7 @@ public class StoryObject {
         return chatOrStory;
     }
 
-    public void setChatOrStory(String email){
+    public void setChatOrStory(String chatOrStory){
         this.chatOrStory = chatOrStory;
     }
 

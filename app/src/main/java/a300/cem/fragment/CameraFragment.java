@@ -45,9 +45,10 @@ import static android.hardware.Camera.open;
 public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
 
+    /*
     //Location
     private LocationManager locationManager;
-    private LocationListener locationListener;
+    private LocationListener locationListener; */
 
 
     //camera
@@ -60,7 +61,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
     //PERMISSIONS
     final int CAMERA_REQUEST_CODE = 1;
-    final int LOCATION_REQUEST_CODE = 2;
+    //final int LOCATION_REQUEST_CODE = 2;
 
     public static CameraFragment newInstance() {
         CameraFragment fragment = new CameraFragment();
@@ -74,6 +75,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
         mSurfaceView = view.findViewById(R.id.surfaceView);
         mSurfaceHolder = mSurfaceView.getHolder();
 
+        /*
         //GET THE LOCATION
         locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -98,7 +100,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
             }
         };
 
-
+        /*
             if (Build.VERSION.SDK_INT < 23) {
                 Toast.makeText(getActivity(), "The android version is bellow marshmallow!", Toast.LENGTH_SHORT).show();
 
@@ -110,7 +112,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
                 } else {
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 }
-            }
+            }*/
 
 
             //Get Permission to access camera
@@ -265,7 +267,7 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
 
         switch (requestCode){
             case CAMERA_REQUEST_CODE: {
-                if(grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     mSurfaceHolder.addCallback(this);
                     mSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
                 }else{
@@ -273,15 +275,16 @@ public class CameraFragment extends Fragment implements SurfaceHolder.Callback {
                 }
                 break;
             }
-            case LOCATION_REQUEST_CODE:{
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+
+           /* case LOCATION_REQUEST_CODE:{
+                if(grantResults.length > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED){
                     if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED){
                         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                     }
 
                 }
                 break;
-            }
+            }*/
         }
     }
 
