@@ -53,12 +53,13 @@ public class FindUsersActivity extends AppCompatActivity {
         mAdapter = new FollowAdapter(getDataSet(), getApplication());
         mRecyclerView.setAdapter(mAdapter);
 
-        mSearch.setOnClickListener(new View.OnClickListener(){
+
+        mSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 //Before searching in database, it requires to clear the data.
                 clear();
+                mAdapter.notifyDataSetChanged();
                 //Searching for user by email
                 listenForData();
             }
