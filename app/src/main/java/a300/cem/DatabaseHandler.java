@@ -10,11 +10,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "user.db";
     public static final String DATABASE_TABLE = "user_table";
+    private static final int DATABASE_VERSION = 1;
 
 
     public DatabaseHandler(Context context) {
 
-        super(context, DATABASE_NAME, null , 1);
+        super(context, DATABASE_NAME, null , DATABASE_VERSION);
         SQLiteDatabase db = this.getWritableDatabase();
     }
 
@@ -39,7 +40,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         contentValues.put("name", userObjectDb.getName());
         contentValues.put("profile", userObjectDb.getProfile());
 
-        long result = sqLiteDatabase.insert("userTable", null, contentValues);
+        long result = sqLiteDatabase.insert(DATABASE_TABLE, null, contentValues);
 
         if (result > 0) {
             Log.d("dbhelper", "inserted successfully");
